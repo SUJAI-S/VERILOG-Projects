@@ -1,0 +1,61 @@
+`timescale 1ns/1ps
+
+module crc_tb;
+
+    reg clk, reset, data_valid;
+    reg [7:0] data_in;
+    wire [7:0] crc_out;
+
+    reg [7:0] received_crc;
+    wire error;
+
+    // Instantiate CRC Generator
+    crc_generator uut_gen (
+        .clk(clk),
+        .reset(reset),
+        .data_valid(data_valid),
+        .data_in(data_in),
+        .crc_out(crc_out)
+    );
+
+    // Instantiate CRC Checker
+    crc_checker uut_check (
+        .received_crc(received_crc),
+        .calculated_crc(crc_out),
+        .error(error)
+    );
+
+    // Clock generation
+    always #5 clk = ~clk;
+
+    initial begin
+        // Initialize
+        clk = 0; reset = 1; data_valid = 0; data_in = 0;
+        #10 reset = 0;
+
+        // Send multiple bytes
+        #10 data_valid = 1; data_in = 8'hAB;
+        #10 data_valid = 1; data_in = 8'hCD;
+        #10 data_valid = 1; data_in = 8'hEF;
+        #10 data_valid = 0;
+
+        // Simulate received CRC (correct)
+        #10 received_crc = crc_out;
+
+        #10 if (error)
+                $display("Test Failed: CRC Error Detected!");
+            else
+                $display("Test Passed: No CRC Error!");
+
+        // Introduce error
+        #10 received_crc = crc_out ^ 8'h01;  // Flip 1 bit
+
+        #10 if (error)
+                $display("Test Passed: CRC Error Detected!");
+            else
+                $display("Test Failed: Error Not Detected!");
+
+        #10 $stop;
+    end
+
+endmodule
