@@ -3,7 +3,7 @@ module baud_gen (
     input wire rst_n,
     output reg baud_clk
 );
-    parameter DIVISOR = 434; // Adjust according to clk and baud rate
+    parameter DIVISOR = 434; 
 
     reg [15:0] count;
 
