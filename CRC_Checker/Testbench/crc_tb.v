@@ -9,7 +9,7 @@ module crc_tb;
     reg [7:0] received_crc;
     wire error;
 
-    // Instantiate CRC Generator
+  
     crc_generator uut_gen (
         .clk(clk),
         .reset(reset),
@@ -18,14 +18,14 @@ module crc_tb;
         .crc_out(crc_out)
     );
 
-    // Instantiate CRC Checker
+   
     crc_checker uut_check (
         .received_crc(received_crc),
         .calculated_crc(crc_out),
         .error(error)
     );
 
-    // Clock generation
+   
     always #5 clk = ~clk;
 
     task send_byte(input [7:0] byte);
@@ -51,7 +51,7 @@ module crc_tb;
         send_byte(8'hCD);
         send_byte(8'hEF);
 
-        // Wait for CRC to be calculated
+       
         #30;
 
         // Use the correct CRC
@@ -63,7 +63,7 @@ module crc_tb;
         else
             $display("Test Passed: No CRC Error!");
 
-        // Introduce a CRC error
+        //  a CRC error
         received_crc = crc_out ^ 8'h01;  // Flip 1 bit
         #10;
 
