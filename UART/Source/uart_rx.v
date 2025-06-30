@@ -5,7 +5,7 @@ module uart_rx (
     output reg [7:0] rx_data,
     output reg rx_data_ready
 );
-    parameter BAUD_TICKS = 434; // Adjust as per clock and baud rate
+    parameter BAUD_TICKS = 434; 
 
     reg [3:0] bit_index;
     reg [15:0] baud_count;
