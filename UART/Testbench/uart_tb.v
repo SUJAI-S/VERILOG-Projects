@@ -2,7 +2,7 @@
 
 module uart_tb;
 
-    // Clock and reset
+  
     reg clk;
     reg rst_n;
 
@@ -20,7 +20,7 @@ module uart_tb;
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // Instantiate Transmitter
+   
     uart_tx TX (
         .clk(clk),
         .rst_n(rst_n),
@@ -30,7 +30,7 @@ module uart_tb;
         .tx_busy(tx_busy)
     );
 
-    // Instantiate Receiver
+  
     uart_rx RX (
         .clk(clk),
         .rst_n(rst_n),
@@ -40,10 +40,10 @@ module uart_tb;
     );
 
     // Data to be sent
-    reg [7:0] test_data [0:3]; // Array to store 4 bytes
+    reg [7:0] test_data [0:3];
     integer i;
 
-    // Simulation sequence
+ 
     initial begin
         // Initialize
         rst_n = 0;
@@ -51,10 +51,10 @@ module uart_tb;
         tx_data = 8'd0;
 
         // Load test data
-        test_data[0] = 8'hA5; // Example data 1
-        test_data[1] = 8'h3C; // Example data 2
-        test_data[2] = 8'h7E; // Example data 3
-        test_data[3] = 8'h55; // Example data 4
+        test_data[0] = 8'hA5;
+        test_data[1] = 8'h3C; 
+        test_data[2] = 8'h7E; 
+        test_data[3] = 8'h55; 
 
         // Apply reset
         #50 rst_n = 1;
@@ -70,15 +70,15 @@ module uart_tb;
             else
                 $display("Test %0d FAILED: Sent = %h, Received = %h", i+1, test_data[i], rx_data);
 
-            // Small gap between bytes
+          
             #10000;
         end
 
-        // Finish simulation
+       
         #100 $finish;
     end
 
-    // Task to send a single byte
+    // send a single byte
     task send_byte(input [7:0] byte);
         begin
             tx_data = byte;
